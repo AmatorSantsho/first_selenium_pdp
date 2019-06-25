@@ -2,11 +2,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Parameters;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.titleIs;
 
@@ -21,17 +17,16 @@ public class TestGoogleConnection {
     private static String TITLE_SEARCH_RESULT = "java - Поиск в Google";
     private static int TIMEOUT = 5;
 
-    @BeforeMethod
+    @BeforeSuite
     @Parameters("browser")
     public void setUp(String browser) {
         driver = BrowserFactory.getDriver(browser);
         wait = new WebDriverWait(driver, TIMEOUT);
     }
 
-    @AfterMethod
+    @AfterSuite
     public void cleanUp() {
-        driver = null;
-        wait = null;
+        driver.quit();
     }
 
     @Test
@@ -41,6 +36,5 @@ public class TestGoogleConnection {
         wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.name(SEARCH_BUTTON))));
         driver.findElement(By.name(SEARCH_BUTTON)).click();
         wait.until(titleIs(TITLE_SEARCH_RESULT));
-        driver.quit();
     }
 }

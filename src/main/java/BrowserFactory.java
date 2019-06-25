@@ -7,47 +7,45 @@ public class BrowserFactory {
     private static WebDriver driver;
 
     public static WebDriver getDriver(String browser) {
+        return driver == null ? createDriver(browser) : driver;
+    }
+
+    private static WebDriver createDriver(String browser) {
         switch (browser) {
             case "Firefox_45": {
-                if (driver == null) {
-                    driver = FireFox45Driver.createInstance();
-                }
+                driver = new FireFox45Driver().createInstance();
             }
             break;
             case "Firefox_48": {
-                if (driver == null) {
-                    driver = Firefox48Driver.createInstance();
-                }
+                driver = new Firefox48Driver().createInstance();
             }
             break;
             case "Chrome": {
-                if (driver == null) {
-                    driver = ChromeLatestDriver.createInstance();
-                }
+                driver = new ChromeLatestDriver().createInstance();
             }
             break;
         }
         return driver;
     }
 
-    private static class FireFox45Driver {
-        public static WebDriver createInstance() {
+    private static class FireFox45Driver implements IDriver {
+        public WebDriver createInstance() {
             DesiredCapabilities capabilities = DesiredCapabilities.firefox();
             capabilities.setCapability("marionette", false);
             return new FirefoxDriver(capabilities);
         }
     }
 
-    private static class Firefox48Driver {
-        public static WebDriver createInstance() {
-            System.setProperty("webdriver.gecko.driver", ".\\src\\test\\resources\\geckodriver.exe");
+    private static class Firefox48Driver implements IDriver {
+        public WebDriver createInstance() {
+            System.setProperty("webdriver.gecko.driver", ".\\src\\main\\resources\\geckodriver.exe");
             return new FirefoxDriver();
         }
     }
 
-    private static class ChromeLatestDriver {
-        public static WebDriver createInstance() {
-            System.setProperty("webdriver.chrome.driver", ".\\src\\test\\resources\\chromedriver.exe");
+    private static class ChromeLatestDriver implements IDriver {
+        public WebDriver createInstance() {
+            System.setProperty("webdriver.chrome.driver", ".\\src\\main\\resources\\chromedriver.exe");
             return new ChromeDriver();
         }
     }
